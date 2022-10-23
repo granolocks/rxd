@@ -1,5 +1,5 @@
-use crate::reader::{Reader};
-use crate::byte::{Byte};
+use crate::reader::Reader;
+use crate::byte::Byte;
 
 const LINE_LENGTH: usize = 16;
 

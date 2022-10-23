@@ -10,3 +10,4 @@ opt-level = "z"
 strip = true
 
 [dependencies]
+thiserror = "1.0.37"

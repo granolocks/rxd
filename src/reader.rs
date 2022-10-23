@@ -2,8 +2,8 @@ use std::fs::File;
 // use std::io;
 // use std::io::prelude::*;
 use std::io::Read;
-use crate::rxd_error::{RxdError};
-use crate::byte::{Byte};
+use crate::rxd_error::RxdError;
+use crate::byte::Byte;
 
 pub enum Reader {
     FileHandle(String),

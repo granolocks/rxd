@@ -1,4 +1,4 @@
-use rxd::runner::{Runner};
+use rxd::runner::Runner;
 
 fn main() {
     let file_path = std::env::args().nth(1);
