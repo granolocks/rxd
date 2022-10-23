@@ -3,7 +3,7 @@ use std::io;
 use std::io::prelude::*;
 use std::io::Read;
 
-const LINE_LENGTH: u8 = 16;
+const LINE_LENGTH: usize = 16;
 
 #[derive(Debug)]
 #[non_exhaustive]
@@ -19,13 +19,20 @@ pub enum Reader {
 }
 
 impl Reader {
-    pub fn read(&mut self) -> Result<Vec<u8>, RxdError> {
+    pub fn new(file_path: Option<String>) -> Self {
+        match file_path {
+            Some(path) => Reader::FileHandle(path),
+            None => Reader::StdIo,
+        }
+    }
+
+    pub fn read(&mut self) -> Result<Vec<Byte>, RxdError> {
         match self {
             Reader::FileHandle(path) => {
                 if let Ok(mut f) = File::open(&path) {
                     let mut buffer = Vec::new();
                     match f.read_to_end(&mut buffer) {
-                        Ok(_) => Ok(buffer),
+                        Ok(_) => Ok(buffer.iter().map(|byte| Byte::new(*byte)).collect()),
                         Err(_) => Err(RxdError::CantReadFile),
                     }
                 } else {
@@ -37,82 +44,56 @@ impl Reader {
     }
 }
 
-// mod formatter {}
-// mod writer {}
-
 #[derive(Debug)]
 pub struct Runner {
     bytes: Vec<Byte>,
 }
 
 impl Runner {
-    pub fn new(mut reader: Reader) -> Self {
+    pub fn new(file_path: Option<String>) -> Self {
+        let mut reader = Reader::new(file_path);
+        let bytes = reader.read().unwrap();
+
         Self {
-            bytes: reader
-                .read()
-                .unwrap()
-                .iter()
-                .map(|byte| Byte::new(*byte))
-                .collect(),
+            bytes,
         }
     }
 
     pub fn print_lines(&self) {
         let lines = self
             .bytes
-            .chunks(LINE_LENGTH as usize)
+            .chunks(LINE_LENGTH)
             .map(|b| Vec::from(b))
             .collect::<Vec<Vec<Byte>>>();
+
         for (i, line) in lines.iter().enumerate() {
             println!(
-                "{:0>8} | {: <21} | {}",
+                "{:0>8} | {: <39} | {}",
                 i,
-                line.iter()
-                    .map(|b| b.to_hex_string())
-                    .collect::<Vec<String>>()
-                    .chunks(2)
-                    .map(|b2| b2.join(""))
-                    .collect::<Vec<String>>()
-                    .join(" "),
-                line.iter()
-                    .map(|b| b.to_ascii())
-                    .collect::<Vec<String>>()
-                    .join("")
+                bytes_to_hex_string(&line),
+                bytes_to_ascii_string(&line)
             )
         }
     }
+}
 
-    pub fn test_hex(&self) {
-        let hex_lines = self
-            .bytes
-            .chunks(LINE_LENGTH as usize)
-            .map(|chunk| {
-                chunk
-                    .iter()
-                    .map(|b| b.to_hex_string())
-                    .collect::<Vec<String>>()
-                    .join(" ")
-            })
-            .collect::<Vec<String>>();
+fn bytes_to_hex_string(bytes: &Vec<Byte>) -> String {
+    bytes
+        .iter()
+        .map(|b| b.to_hex_string())
+        .collect::<Vec<String>>()
+        .chunks(2)
+        .map(|b2| b2.join(""))
+        .collect::<Vec<String>>()
+        .join(" ")
+}
 
-        println!("as hex: {:?}", &hex_lines);
-    }
-
-    pub fn test_ascii(&self) {
-        let ascii_lines = self
-            .bytes
-            .chunks(LINE_LENGTH as usize)
-            .map(|chunk| {
-                chunk
-                    .iter()
-                    .map(|b| String::from(b.to_ascii()))
-                    .collect::<Vec<String>>()
-                    .join("")
-            })
-            .collect::<Vec<String>>();
-
-        println!("as hex: {:?}", &ascii_lines);
-    }
+fn bytes_to_ascii_string(bytes: &Vec<Byte>) -> String {
+    bytes
+        .iter()
+        .map(|b| b.to_ascii())
+        .collect::<Vec<String>>()
+        .join("")
 }
 
 #[derive(Debug, Clone, Copy)]

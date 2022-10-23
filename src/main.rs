@@ -1,7 +1,7 @@
-use rxd::{Reader, Runner};
+use rxd::Runner;
 
 fn main() {
-    let mut reader = Reader::FileHandle(String::from("TODO get from env"));
-    let runner = Runner::new(reader);
+    let file_path = std::env::args().nth(1);
+    let runner = Runner::new(file_path);
     runner.print_lines();
 }
