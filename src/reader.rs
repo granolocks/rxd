@@ -1,20 +1,21 @@
-use std::fs::File;
-// use std::io;
-// use std::io::prelude::*;
-use std::io::Read;
-use crate::rxd_error::RxdError;
 use crate::byte::Byte;
+use crate::rxd_error::RxdError;
+use std::fs::File;
+use std::io;
+use std::io::{BufReader, Read};
 
+#[derive(Debug)]
+#[non_exhaustive]
 pub enum Reader {
     FileHandle(String),
-    StdIo,
+    StdIn,
 }
 
 impl Reader {
     pub fn new(file_path: Option<String>) -> Self {
         match file_path {
             Some(path) => Reader::FileHandle(path),
-            None => Reader::StdIo,
+            None => Reader::StdIn,
         }
     }
 
@@ -31,7 +32,20 @@ impl Reader {
                     Err(RxdError::CantOpenFile)
                 }
             }
-            _ => Err(RxdError::UnhandledReader),
+
+            Reader::StdIn => {
+                let mut buf_reader = BufReader::new(io::stdin());
+                let mut buffer = Vec::new();
+                match buf_reader.read_to_end(&mut buffer) {
+                    Ok(_) => Ok(buffer.iter().map(|byte| Byte::new(*byte)).collect()),
+                    Err(_) => Err(RxdError::CantReadStdIn),
+                }
+            }
+
+            _ => {
+                println!("{:?}", &self);
+                Err(RxdError::UnhandledReader)
+            }
         }
     }
 }

@@ -11,4 +11,7 @@ pub enum RxdError {
 
     #[error("Unhandled Reader Type")]
     UnhandledReader,
+
+    #[error("Can't read STDIN")]
+    CantReadStdIn,
 }

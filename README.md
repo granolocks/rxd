@@ -11,7 +11,7 @@ Create a binary by running `cargo build --release` and then place the file in
 
 ## Usage 
 
-Currently only supports a single file as the first argument like 
+Currently only supports a single file as the first argument like:
 
 ```
 $ rxd Cargo.toml
@@ -22,23 +22,15 @@ $ rxd Cargo.toml
 00000004 | 206d 6f72 6520 6b65 7973 2061 6e64 2074 |  more keys and t
 00000005 | 6865 6972 2064 6566 696e 6974 696f 6e73 | heir definitions
 00000006 | 2061 7420 6874 7470 733a 2f2f 646f 632e |  at https://doc.
-00000007 | 7275 7374 2d6c 616e 672e 6f72 672f 6361 | rust-lang.org/ca
-00000008 | 7267 6f2f 7265 6665 7265 6e63 652f 6d61 | rgo/reference/ma
-00000009 | 6e69 6665 7374 2e68 746d 6c0a 0a5b 7072 | nifest.html..[pr
-00000010 | 6f66 696c 652e 7265 6c65 6173 655d 0a6f | ofile.release].o
-00000011 | 7074 2d6c 6576 656c 203d 2022 7a22 0a73 | pt-level = "z".s
-00000012 | 7472 6970 203d 2074 7275 650a 0a5b 6465 | trip = true..[de
-00000013 | 7065 6e64 656e 6369 6573 5d0a           | pendencies].
+...
 ```
 
+Also supports piping via std in like `cat somefiles.txt | rxd`
 
 ## TODO
-- [ ] improve arg parsing
-- [ ] support std input
-- [ ] dynamic formatter options
-- [ ] binary format
-- [ ] offset options
-- [ ] length option
+- [ ] improve arg parsing - flags, multiple files
+- [x] support std input
+- [ ] dynamic formatter options - binary not hex, byte groupings (currently 2 bytes wide), line length (default is 16 bytes per line)
 
 As a reminder these are the options supported  by `xxd` which I would like to explore;
 
