@@ -2,7 +2,7 @@
 
 This is just an exploratory repo to play with rust concepts. Inspired by tools 
 like `hexdump`, `xxd` and `hexyl` this simply dumps hex values from a file
-and (TODO) std input.
+or std input.
 
 ## Build
 
