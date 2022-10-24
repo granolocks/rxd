@@ -1,6 +1,6 @@
 use thiserror::Error;
 
-#[derive(Debug,Error)]
+#[derive(Debug, Error)]
 #[non_exhaustive]
 pub enum RxdError {
     #[error("Can't open file")]
