@@ -61,7 +61,7 @@ mod test {
         let ascii_range = (0u8..=255u8)
             .map(|b| Byte::new(b).to_ascii())
             .collect::<Vec<String>>()
-            .join((""));
+            .join("");
         assert_eq!(ascii_range, "................................ !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~..................................¡¢£¤¥¦§¨©ª«¬\u{ad}®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ")
     }
 
@@ -83,5 +83,14 @@ mod test {
             Byte::new(0xef),
         ];
         assert_eq!(String::from("dead beef"), bytes_to_hex_string(&v2));
+        let v2 = vec![
+            Byte::new(0xde),
+            Byte::new(0xad),
+            Byte::new(0xbe),
+            Byte::new(0xef),
+            Byte::new(0xca),
+            Byte::new(0xfe),
+        ];
+        assert_eq!(String::from("dead beef cafe"), bytes_to_hex_string(&v2));
     }
 }
