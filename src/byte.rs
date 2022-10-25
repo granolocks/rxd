@@ -1,14 +1,18 @@
-const ASCII_NON_PRINTABLE_RANGE_1_START: u8 = 0x00u8;
-const ASCII_NON_PRINTABLE_RANGE_1_END: u8 = 0x1Fu8;
+// non printable
+const ASCII_NP_1_L: u8 = 0x00u8;
+const ASCII_NP_1_U: u8 = 0x1Fu8;
 
-const ASCII_PRINTABLE_RANGE_1_START: u8 = 0x20u8;
-const ASCII_PRINTABLE_RANGE_1_END: u8 = 0x7eu8;
+// printable
+const ASCII_P_1_L: u8 = 0x20u8;
+const ASCII_P_1_U: u8 = 0x7eu8;
 
-const ASCII_NON_PRINTABLE_RANGE_2_START: u8 = 0x7fu8;
-const ASCII_NON_PRINTABLE_RANGE_2_END: u8 = 0xa0u8;
+// non printable
+const ASCII_NP_2_L: u8 = 0x7fu8;
+const ASCII_NP_2_U: u8 = 0xa0u8;
 
-const ASCII_PRINTABLE_RANGE_2_START: u8 = 0xa1u8;
-const ASCII_PRINTABLE_RANGE_2_END: u8 = 0xff;
+//printable
+const ASCII_P_2_L: u8 = 0xa1u8;
+const ASCII_P_2_U: u8 = 0xff;
 
 #[derive(Debug, Clone)]
 enum AsciiType {
@@ -19,14 +23,10 @@ enum AsciiType {
 impl AsciiType {
     fn categorize(byte: u8) -> AsciiType {
         match byte {
-            ASCII_NON_PRINTABLE_RANGE_1_START..=ASCII_NON_PRINTABLE_RANGE_1_END => {
-                AsciiType::NonPrintable
-            }
-            ASCII_PRINTABLE_RANGE_1_START..=ASCII_PRINTABLE_RANGE_1_END => AsciiType::Printable,
-            ASCII_NON_PRINTABLE_RANGE_2_START..=ASCII_NON_PRINTABLE_RANGE_2_END => {
-                AsciiType::NonPrintable
-            }
-            ASCII_PRINTABLE_RANGE_2_START..=ASCII_PRINTABLE_RANGE_2_END => AsciiType::Printable,
+            ASCII_NP_1_L..=ASCII_NP_1_U => AsciiType::NonPrintable,
+            ASCII_P_1_L..=ASCII_P_1_U => AsciiType::Printable,
+            ASCII_NP_2_L..=ASCII_NP_2_U => AsciiType::NonPrintable,
+            ASCII_P_2_L..=ASCII_P_2_U => AsciiType::Printable,
         }
     }
 }
@@ -83,10 +83,10 @@ mod test {
 
     #[test]
     fn test_byte_to_ascii() {
-        let non_printable_1 = ASCII_NON_PRINTABLE_RANGE_1_START..ASCII_NON_PRINTABLE_RANGE_1_END;
-        let non_printable_2 = ASCII_NON_PRINTABLE_RANGE_2_START..ASCII_NON_PRINTABLE_RANGE_2_END;
-        let printable_1 = ASCII_PRINTABLE_RANGE_1_START..=ASCII_PRINTABLE_RANGE_1_END;
-        let printable_2 = ASCII_PRINTABLE_RANGE_2_START..=ASCII_PRINTABLE_RANGE_2_END;
+        let non_printable_1 = ASCII_NP_1_L..ASCII_NP_1_U;
+        let non_printable_2 = ASCII_NP_2_L..ASCII_NP_2_U;
+        let printable_1 = ASCII_P_1_L..=ASCII_P_1_U;
+        let printable_2 = ASCII_P_2_L..=ASCII_P_2_U;
 
         let np1 = range_to_ascii(non_printable_1);
         assert_eq!(String::from(".".repeat(np1.0)), np1.1);
