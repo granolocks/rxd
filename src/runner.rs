@@ -46,11 +46,9 @@ impl Runner {
 pub fn bytes_to_hex_string(bytes: &[Byte], config: &Config) -> String {
     bytes
         .iter()
-        .map(|b| {
-            match config.colorize_hex {
-                true => b.to_colored_hex_string(),
-                false => b.to_hex_string()
-            }
+        .map(|b| match config.colorize_hex {
+            true => b.to_colored_hex_string(),
+            false => b.to_hex_string(),
         })
         .collect::<Vec<String>>()
         .chunks(2)
