@@ -53,6 +53,13 @@ impl Byte {
         String::from(ascii_char)
     }
 
+    pub fn to_colored_hex_string(&self) -> String {
+        match self.ascii_type {
+            AsciiType::Printable => format!("\x1b[31m{:02x}\x1b[0m", self.byte),
+            AsciiType::NonPrintable => format!("{:02x}", self.byte),
+        }
+    }
+
     pub fn to_hex_string(&self) -> String {
         format!("{:02x}", self.byte)
     }

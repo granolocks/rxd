@@ -4,8 +4,14 @@ use crate::reader::Reader;
 const LINE_LENGTH: usize = 16;
 
 #[derive(Debug)]
+pub struct Config {
+    pub colorize_hex: bool,
+}
+
+#[derive(Debug)]
 pub struct Runner {
     bytes: Vec<Byte>,
+    config: Config,
 }
 
 impl Runner {
@@ -13,7 +19,10 @@ impl Runner {
         let mut reader = Reader::new(file_path);
         let bytes = reader.read().unwrap();
 
-        Self { bytes }
+        Self {
+            bytes,
+            config: Config { colorize_hex: true },
+        }
     }
 
     pub fn print_lines(&self) {
@@ -27,17 +36,22 @@ impl Runner {
             println!(
                 "{:0>8} | {: <39} | {}",
                 i,
-                bytes_to_hex_string(line),
+                bytes_to_hex_string(line, &self.config),
                 bytes_to_ascii_string(line)
             )
         }
     }
 }
 
-pub fn bytes_to_hex_string(bytes: &[Byte]) -> String {
+pub fn bytes_to_hex_string(bytes: &[Byte], config: &Config) -> String {
     bytes
         .iter()
-        .map(|b| b.to_hex_string())
+        .map(|b| {
+            match config.colorize_hex {
+                true => b.to_colored_hex_string(),
+                false => b.to_hex_string()
+            }
+        })
         .collect::<Vec<String>>()
         .chunks(2)
         .map(|b2| b2.join(""))
