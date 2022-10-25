@@ -80,13 +80,14 @@ mod test {
     #[test]
     fn test_bytes_to_hex_string() {
         let v_empty: Vec<Byte> = vec![];
-        assert_eq!(String::from(""), bytes_to_hex_string(&v_empty));
+        let config = Config { colorize_hex: false};
+        assert_eq!(String::from(""), bytes_to_hex_string(&v_empty, &config));
 
         let v0 = vec![Byte::new(0)];
-        assert_eq!(String::from("00"), bytes_to_hex_string(&v0));
+        assert_eq!(String::from("00"), bytes_to_hex_string(&v0, &config));
 
         let v1 = vec![Byte::new(0), Byte::new(255)];
-        assert_eq!(String::from("00ff"), bytes_to_hex_string(&v1));
+        assert_eq!(String::from("00ff"), bytes_to_hex_string(&v1, &config));
 
         let v2 = vec![
             Byte::new(0xde),
@@ -94,7 +95,7 @@ mod test {
             Byte::new(0xbe),
             Byte::new(0xef),
         ];
-        assert_eq!(String::from("dead beef"), bytes_to_hex_string(&v2));
+        assert_eq!(String::from("dead beef"), bytes_to_hex_string(&v2, &config));
         let v2 = vec![
             Byte::new(0xde),
             Byte::new(0xad),
@@ -103,6 +104,6 @@ mod test {
             Byte::new(0xca),
             Byte::new(0xfe),
         ];
-        assert_eq!(String::from("dead beef cafe"), bytes_to_hex_string(&v2));
+        assert_eq!(String::from("dead beef cafe"), bytes_to_hex_string(&v2, &config));
     }
 }
