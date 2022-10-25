@@ -20,21 +20,21 @@ impl Runner {
         let lines = self
             .bytes
             .chunks(LINE_LENGTH)
-            .map(|b| Vec::from(b))
+            .map(Vec::from)
             .collect::<Vec<Vec<Byte>>>();
 
         for (i, line) in lines.iter().enumerate() {
             println!(
                 "{:0>8} | {: <39} | {}",
                 i,
-                bytes_to_hex_string(&line),
-                bytes_to_ascii_string(&line)
+                bytes_to_hex_string(line),
+                bytes_to_ascii_string(line)
             )
         }
     }
 }
 
-pub fn bytes_to_hex_string(bytes: &Vec<Byte>) -> String {
+pub fn bytes_to_hex_string(bytes: &[Byte]) -> String {
     bytes
         .iter()
         .map(|b| b.to_hex_string())
@@ -45,7 +45,7 @@ pub fn bytes_to_hex_string(bytes: &Vec<Byte>) -> String {
         .join(" ")
 }
 
-pub fn bytes_to_ascii_string(bytes: &Vec<Byte>) -> String {
+pub fn bytes_to_ascii_string(bytes: &[Byte]) -> String {
     bytes
         .iter()
         .map(|b| b.to_ascii())

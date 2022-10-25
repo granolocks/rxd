@@ -41,11 +41,6 @@ impl Reader {
                     Err(_) => Err(RxdError::CantReadStdIn),
                 }
             }
-
-            _ => {
-                println!("{:?}", &self);
-                Err(RxdError::UnhandledReader)
-            }
         }
     }
 }
